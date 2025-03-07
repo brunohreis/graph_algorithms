@@ -24,6 +24,7 @@ public class DepthFirstSearch extends Search {
 	public int[] getFather() {
 		return father;
 	}
+	@Override
 	public void search() {
 		// As long as there is a vertex undiscovered, execute the search innit as the root
 		for(int i=0; i<discoveryTime.length; i++) {
@@ -40,7 +41,7 @@ public class DepthFirstSearch extends Search {
 				// if the vertex w is visited for the first time
 				
 				// the tree edge is explored
-				edges.add(new Edge(v, w, false));
+				edges.add(new Edge(v, w, EdgeType.fatherEdge));
 				
 				father[w] = v;
 				search(w);
@@ -49,7 +50,7 @@ public class DepthFirstSearch extends Search {
 				// if w is ancestor of v but not the father
 				
 				// the returning edge is explored
-				edges.add(new Edge(v, w, true));
+				edges.add(new Edge(v, w, EdgeType.returningEdge));
 			}
 		}
 		finishTime[v] = ++time;
