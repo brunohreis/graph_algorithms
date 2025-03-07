@@ -3,10 +3,12 @@ package graphAlgorithms;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.LinkedList;
 
 public class Graph {
 	
-	private int[][] adjMatrix;
+	private LinkedList<Integer>[] adjacencyLists;
+	private int vCount;
 	
 	Graph(String filename){
 		try {
@@ -15,13 +17,16 @@ public class Graph {
 			// If the representation is an adjacency matrix
 			if(line != null && line.equals("Adjacency Matrix")) {
 				line = br.readLine();
-				int vCount, j = 0;
+				int j = 0;
 				if(line != null) {
 					vCount = line.length();
-					adjMatrix = new int[vCount][vCount];
+					adjacencyLists = new LinkedList[vCount];
 					do {
+						adjacencyLists[j] = new LinkedList<Integer>();
 						for(int i = 0; i < vCount; i++) {
-							adjMatrix[j][i] = line.charAt(i) - 48;
+							if(line.charAt(i) - '0' == 1) {
+								adjacencyLists[j].add(i);
+							}
 						}
 						
 						line = br.readLine();
@@ -39,25 +44,26 @@ public class Graph {
 		}
 	}
 	
-	public int[][] getAdjMatrix(){
-		return adjMatrix;
+	
+	public int getvCount() {
+		return vCount;
+	}
+
+
+	public LinkedList<Integer>[] getAdjacencyLists() {
+		return adjacencyLists;
+	}
+
+
+	public LinkedList<Integer> getNeighbors(int vertex) {
+		return adjacencyLists[vertex];
 	}
 	
-	public int[] getNeighbors(int vertex) {
-		int[] neighbors, aux;
-		aux = new int[adjMatrix.length];
-		int count = 0;
-		for(int i=0; i<adjMatrix.length; i++) {
-			if(adjMatrix[vertex][i] == 1) {
-				aux[count] = i;
-				count++;
-			}
+	public int getEdgesCount() {
+		int edgesCount = 0;
+		for(int i=0; i<adjacencyLists.length; i++) {
+			edgesCount += adjacencyLists[i].size();
 		}
-		neighbors = new int[count];
-		for(int i=0; i<count; i++) {
-			neighbors[i] = aux[i];
-		}
-		
-		return neighbors;
+		return edgesCount;
 	}
 }
